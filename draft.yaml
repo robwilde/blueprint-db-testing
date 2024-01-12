@@ -1,0 +1,37 @@
+models:
+    Template:
+        id: uuid primary
+        openehr_uid: uuid
+        template_id: string
+        template_key: string comment:"it is the first part of the template_id minus the UUID"
+        sem_ver: string
+        name: string comment:"relates to concept in OPT and must be edited to human readable format"
+        web_template_data: json
+        created_at: timestampTz
+        meta: json
+        opt_file_path: string:255
+        parent_id: uuid foreign:Templates.id
+        capture_by: string comment:"patient vs clinician"
+        deleted_at: timestampTz
+    BlockConfigurationInstance:
+        id: uuid primary
+        block_configuration_id: uuid foreign:block_configurations.id
+        version: string:255
+        published_at: timestampTz nullable
+        released_at: timestampTz nullable
+        layout: jsonb
+        layout_translations: jsonb
+        template_configurations: jsonb
+        meta: jsonb
+        notes: jsonb nullable
+        created_at: timestampTz nullable
+        generated_template_id: uuid nullable comment:"the generated template based on configuration" foreign:Templates.id
+        base_template_id: uuid comment:"the base_template or uploaded OPT this was created from" foreign:Templates.id
+    BlockConfiguration:
+        id: uuid primary
+        template_key: uuid index comment:"first part of the template_id in OPT file. Reflects the base template used to create block configuration"
+        name: string:10
+        description: text
+        type: string:255
+        meta: jsonb
+        created_at: timestampTz nullable
