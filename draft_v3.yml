@@ -1,7 +1,4 @@
 models:
-    TemplateKey:
-        id: uuid primary
-        key: string comment:"first part of the template_id in OPT file. Reflects the base template used to create block configuration"
     BlockTemplate:
         id: uuid primary
         openehr_uid: uuid
@@ -12,12 +9,14 @@ models:
         created_at: timestampTz
         meta: json
         opt_file_path: text
-        parent_id: uuid nullable
+        parent_id: uuid foreign:block_templates.id
         captured_by: string comment:"patient vs clinician"
         deleted_at: timestampTz nullable
-        template_key_id: uuid foreign:template_keys.id
+        template_key_id: uuid nullable foreign:template_keys.id
         opt_meta: json
-        timestamps: false
+    TemplateKey:
+        id: uuid primary
+        key: string comment:"first part of the template_id in OPT file. Reflects the base template used to create block configuration"
     BlockConfiguration:
         id: uuid primary
         name: string:255
@@ -27,7 +26,6 @@ models:
         created_at: timestampTz
         template_key_id: uuid foreign:template_keys.id
         updated_at: timestampTz nullable
-        timestamps: false
     BlockConfigurationInstance:
         id: uuid primary
         block_configuration_id: uuid foreign:block_configurations.id
@@ -42,6 +40,3 @@ models:
         created_at: timestampTz
         generated_template_id: uuid nullable comment:"the generated template based on configuration" foreign:block_templates.id
         base_template_id: uuid comment:"the base_template or uploaded OPT this was created from" foreign:block_templates.id
-        timestamps: false
-
-seeders: BlockTemplate, BlockConfiguration, BlockConfigurationInstance

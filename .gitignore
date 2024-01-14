@@ -17,3 +17,11 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+### Laravel template
+/vendor/
+node_modules/
+
+storage/*.key
+
+/draft.yaml
+/.blueprint
